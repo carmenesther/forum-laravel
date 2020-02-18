@@ -1,0 +1,23 @@
+version: '3'
+services:
+    php:
+        build: .
+        volumes:
+            - ./apache2:/etc/apache2/
+            - ./web:/var/www/html
+            - ./docker/custom.ini:/usr/local/etc/php/conf.d/custom.ini
+        environment:
+            XDEBUG_CONFIG: 'remote_host=192.168.1.199'
+            PHP_IDE_CONFIG: 'serverName=my.local'
+        ports:
+            - '80:80'
+            - '443:443'
+    mysql:
+        image: mysql:5.7
+        ports:
+            - '3306:3306'
+        environment:
+            MYSQL_ROOT_PASSWORD: secret
+            MYSQL_DATABASE: homestead
+            MYSQL_USER: homestead
+            MYSQL_PASSWORD: secret
