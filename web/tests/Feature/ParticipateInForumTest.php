@@ -11,7 +11,7 @@ use Tests\TestCase;
 class ParticipateInForumTest extends TestCase
 {
     use DatabaseMigrations;
-    // TEST NOT WORKING CHECK AFTER
+
     /** @test */
     function unauthenticated_users_may_not_add_replies()
     {
@@ -19,7 +19,6 @@ class ParticipateInForumTest extends TestCase
         $this->withoutExceptionHandling();
     }
 
-    // TEST NOT WORKING CHECK AFTER
     /** @test */
     function an_authenticated_user_may_participate_in_forum_threads()
     {
