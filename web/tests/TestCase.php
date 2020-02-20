@@ -17,4 +17,12 @@ abstract class TestCase extends BaseTestCase
 
         return $this;
     }
+
+    protected  function withExceptionHandling()
+    {
+        $this->expectException('Illuminate\Auth\AuthenticationException');
+        $this->withoutExceptionHandling();
+
+        return $this;
+    }
 }
