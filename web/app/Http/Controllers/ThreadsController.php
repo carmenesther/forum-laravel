@@ -31,12 +31,15 @@ class ThreadsController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created resource in storage
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function store(Request $request)
     {
         $thread = Thread::create([
             'user_id' => auth() ->id(),
+            'channel_id' => request('channel_id'),
             'title' => request('title'),
             'body' => request('body')
         ]);
@@ -46,9 +49,11 @@ class ThreadsController extends Controller
 
     /**
      * Display the specified resource.
-     *
+     * @param $channelId
+     * @param Thread $thread
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function show(Thread $thread)
+    public function show($channelId, Thread $thread)
     {
         return view('threads.show', compact('thread'));
     }

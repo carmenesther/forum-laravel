@@ -12,20 +12,17 @@ class CreateThreadTest extends TestCase
     use DatabaseMigrations;
 
     /** @test */
-    function guests_cannot_create_thread()
+    function guests_may_not_create_threads ()
     {
         $this->withExceptionHandling();
-        $thread = make(Thread::class);
-        $this->post('/threads', $thread->toArray());
-    }
 
-    /** @test */
-    function guests_cannot_see_the_create_thread_page()
-    {
-        $this->withExceptionHandling();
         $this->get('/threads/create')
             ->assertRedirect('/login');
+
+        $this->post('/threads')
+            ->assertRedirect('/login');
     }
+
     /** @test */
     function an_authenticated_user_can_create_new_forum_threads()
     {
@@ -33,7 +30,8 @@ class CreateThreadTest extends TestCase
         // given a signed user
         $this->signIn();
         // create a new thread
-        $thread = make(Thread::class);
+        $thread = create(Thread::class);
+
         $this->post('/threads', $thread->toArray());
         // when we visit the thread page, we should see the new one
         $this->get($thread->path())

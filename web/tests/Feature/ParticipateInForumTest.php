@@ -15,7 +15,7 @@ class ParticipateInForumTest extends TestCase
     /** @test */
     function unauthenticated_users_may_not_add_replies()
     {
-        $this->post('/threads/1/replies', []);
+        $this->post('/threads/post/1/replies', []);
         $this->withoutExceptionHandling();
     }
 
@@ -30,7 +30,7 @@ class ParticipateInForumTest extends TestCase
 
         $reply = create(Reply::class);
 
-        $this->post('/threads/' . $thread->id . '/replies', $reply->toArray());
+        $this->post($thread->path() . '/replies', $reply->toArray());
         $this->get($thread->path())->assertSee($reply->body);
 
     }
