@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Channel;
 use App\Thread;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -10,6 +11,18 @@ use Tests\TestCase;
 class CreateThreadTest extends TestCase
 {
     use DatabaseMigrations;
+
+    /**
+     * @var \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model
+     */
+    protected $thread;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->thread = create(Thread::class);
+    }
 
     /** @test */
     function guests_may_not_create_threads ()
@@ -30,12 +43,42 @@ class CreateThreadTest extends TestCase
         // given a signed user
         $this->signIn();
         // create a new thread
-        $thread = create(Thread::class);
-
-        $this->post('/threads', $thread->toArray());
+        $response = $this->post('/threads', $this->thread->toArray());
         // when we visit the thread page, we should see the new one
-        $this->get($thread->path())
-            ->assertSee($thread->title)
-            ->assertSee($thread->body);
+        $this->get($response->headers->get('Location'))
+            ->assertSee($this->thread->title)
+            ->assertSee($this->thread->body);
+    }
+    /** @test */
+    function a_thread_requires_a_title ()
+    {
+        $this->publishThread(['title' => null]);
+
+    }
+
+    /** @test */
+    function a_thread_requires_a_body ()
+    {
+
+        $this->publishThread(['body' => null]);
+    }
+
+    /** @test */
+    function a_thread_requires_a_valid_channel ()
+    {
+        factory(Channel::class, 2)->create();
+
+        $this->publishThread(['channel_id' => null]);
+
+        $this->publishThread(['channel_id' => 999]);
+    }
+
+    public function publishThread($overrides = [])
+    {
+        $this->withExceptionHandling()->signIn();
+
+        $thread = make(Thread::class, @$overrides);
+
+        $this->post('/threads', $thread->toArray())->assertSessionHasErrors();
     }
 }
