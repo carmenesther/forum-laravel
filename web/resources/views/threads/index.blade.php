@@ -6,11 +6,7 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">Forum Threads
-                        @if(auth()->check())
-                            <a href="/threads/create" class="text-danger float-right"> Create a new thread</a>
-                        @endif
                     </div>
-
                     <div class="card-body">
                         @foreach($threads as $thread)
                             <article>
