@@ -24,14 +24,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // if we want do it with only a single view to share a variable
+        // if we want to share the variable with all the views without expecting errors in the test
+        \View::composer('*', function($view)
+        {
+            $view->with('channels', \App\Channel::all());
+        });
 
-//        \View::composer('threads.create', function($view)
-//        {
-//            $view->with('channels', \App\Channel::all());
-//        });
-
-        // if we want to share this variable with all of them
-          View::share('channels', \App\Channel::all());
     }
 }
+
