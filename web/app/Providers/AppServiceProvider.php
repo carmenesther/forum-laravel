@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -13,9 +14,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        if ($this->app->environment() !== 'production') {
-            $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
-        }
+        //
     }
 
     /**
@@ -25,6 +24,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        // if we want do it with only a single view to share a variable
+
+//        \View::composer('threads.create', function($view)
+//        {
+//            $view->with('channels', \App\Channel::all());
+//        });
+
+        // if we want to share this variable with all of them
+          View::share('channels', \App\Channel::all());
     }
 }
