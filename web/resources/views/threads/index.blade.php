@@ -10,13 +10,17 @@
                     <div class="card-body">
                         @foreach($threads as $thread)
                             <article>
-                                <h4><a href="{{$thread->path()}}">
-                                        {{$thread->title}}
+                                <div class="level">
+                                    <h4 class="flex"><a href="{{$thread->path()}}">
+                                            {{$thread->title}}
+                                        </a>
+                                    </h4>
+                                    <a href="{{$thread->path()}}">
+                                        {{$thread->replies_count}} {{ Str::plural('reply', $thread->replies_count) }}
                                     </a>
-                                </h4>
+                                </div>
                                 <div class="body">{{$thread->body}}</div>
                             </article>
-
                             <hr>
                         @endforeach
                     </div>
