@@ -81,10 +81,12 @@ class ReadThreadsTest extends TestCase
 
         $threadWithThreeReplies = create(Thread::class);
         create(Reply::class, ['thread_id' => $threadWithThreeReplies->id], 3);
-
-        $threadWithNoReplies = $this->thread;
+        $thread = create(Thread::class);
+        $threadWithNoReplies = $thread;
 
         $response = $this->getJson('threads?popular=1')->json();
+
+        //dd($response);
 
         $this->assertEquals([3,2,0], array_column($response, 'replies_count'));
     }
