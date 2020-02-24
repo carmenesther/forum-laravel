@@ -7,8 +7,8 @@ services:
             - ./web:/var/www/html
             - ./docker/custom.ini:/usr/local/etc/php/conf.d/custom.ini
         environment:
-            XDEBUG_CONFIG: 'remote_host=192.168.1.199'
-            PHP_IDE_CONFIG: 'serverName=my.local'
+            XDEBUG_CONFIG: 'remote_host=192.168.1.180'
+            PHP_IDE_CONFIG: 'serverName=SERVERNAME'
         ports:
             - '80:80'
             - '443:443'
