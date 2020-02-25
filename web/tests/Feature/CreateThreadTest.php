@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Activity;
 use App\Channel;
 use App\Reply;
 use App\Thread;
@@ -104,6 +105,18 @@ class CreateThreadTest extends TestCase
 
         $this->assertDatabaseMissing('threads', ['id' => $thread->id]);
         $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
+
+//        $this->assertDatabaseMissing('activities', [
+//            'subject_id' => $reply->id,
+//            'subject_type' => get_class($reply)
+//        ]);
+//
+//        $this->assertDatabaseMissing('activities', [
+//           'subject_id' => $thread->id,
+//           'subject_type' => get_class($thread)
+//        ]);
+
+        $this->assertEquals(0, Activity::count());
     }
 
     /** @test*/
