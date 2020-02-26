@@ -6,6 +6,7 @@
  * Copyright 2011-2019 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
+
 :root {
   --blue: #3490dc;
   --indigo: #6574cd;
@@ -41,12 +42,6 @@
 *::before,
 *::after {
   box-sizing: border-box;
-}
-
-.page-header{
-    padding-bottom:10px;
-    margin:22px 0 22px;
-    border-bottom:1px solid #eee
 }
 
 html {
@@ -4971,7 +4966,6 @@ input[type=button].btn-block {
   background-clip: border-box;
   border: 1px solid rgba(0, 0, 0, 0.125);
   border-radius: 0.25rem;
-  margin-bottom: 1rem;
 }
 
 .card > hr {
@@ -10888,5 +10882,15 @@ a.text-dark:focus {
     color: inherit;
     border-color: #dee2e6;
   }
+}
+
+.card {
+  margin-bottom: 1rem;
+}
+
+.page-header {
+  padding-bottom: 10px;
+  margin: 22px 0 22px;
+  border-bottom: 1px solid #eee;
 }
 
