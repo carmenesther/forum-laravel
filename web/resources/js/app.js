@@ -4,9 +4,19 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
+import Thread from "./pages/Thread";
+
 require('./bootstrap');
 
 window.Vue = require('vue');
+
+Vue.prototype.authorize = function (handler){
+    // Additional admin privileges
+    let user = window.App.user;
+
+    return user ? handler(user) : false;
+
+};
 
 /**
  * The following block of code may be used to automatically register your
@@ -20,8 +30,8 @@ window.Vue = require('vue');
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.component('flash', require('./components/Flash.vue').default);
-Vue.component('reply', require('./components/Reply.vue').default);
-
+Vue.component('replies', require('./components/Replies.vue').default);
+Vue.component('thread-view', require('./pages/Thread').default);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
