@@ -20,6 +20,7 @@
                             <li><a href="/threads?by={{auth()->user()->name}}" class="dropdown-item">My Threads</a></li>
                         @endif
                         <li><a href="/threads?popular=1" class="dropdown-item">Popular Threads</a></li>
+                        <li><a href="/threads?unanswered=1" class="dropdown-item">Unanswered Threads</a></li>
                     </ul>
                 </li>
 

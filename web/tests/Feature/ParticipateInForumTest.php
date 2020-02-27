@@ -31,6 +31,7 @@ class ParticipateInForumTest extends TestCase
         $this->post($thread->path() . '/replies', $reply->toArray());
 
         $this->assertDatabaseHas('replies', ['body' => $reply->body]);
+        $this->assertEquals(1, $thread->fresh()->replies_count);
     }
 
     /** @test */
@@ -48,7 +49,7 @@ class ParticipateInForumTest extends TestCase
     /** @test */
     function unauthorized_users_cannot_delete_replies()
     {
-         $this->withExceptionHandling();
+        $this->withExceptionHandling();
 
         $reply = create('App\Reply');
 
@@ -85,6 +86,7 @@ class ParticipateInForumTest extends TestCase
         $this->delete("/replies/{$reply->id}")->assertStatus(302);
 
         $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
+        $this->assertEquals(0, $reply->thread->fresh()->replies_count);
 
     }
 
