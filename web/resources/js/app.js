@@ -31,6 +31,7 @@ Vue.prototype.authorize = function (handler){
 
 Vue.component('flash', require('./components/Flash.vue').default);
 Vue.component('thread-view', require('./pages/Thread.vue').default);
+Vue.component('paginator', require('./components/Paginator.vue').default);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
