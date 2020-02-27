@@ -13,19 +13,22 @@ class RepliesController extends Controller
     }
 
     /**
-     * @param $channelId
-     * @param Thread $thread
-     * @return \Illuminate\Http\RedirectResponse
-     * @throws \Illuminate\Validation\ValidationException
+     * Persist a new reply
      */
+
     public function store($channelId, Thread $thread){
 
         $this->validate(request(), ['body' => 'required']);
 
-        $thread->addReply([
+        $reply = $thread->addReply([
             'body' => request('body'),
             'user_id' => auth()->id()
         ]);
+
+        if(request()->expectsJson()){
+            return $reply->load('owner');
+        }
+
         return back()->with('flash', 'Your reply has been left');
     }
 

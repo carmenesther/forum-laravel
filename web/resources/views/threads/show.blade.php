@@ -8,15 +8,17 @@
                     <div class="card">
                         <div class="card-header">
                             <div class="level">
-                            <span class="flex">
-                            <a href="{{ route('profile', $thread->creator) }}"> {{$thread->creator->name}} </a> posted:
-                            {{$thread->title}}
-                            </span>
+                                <span class="flex">
+                                    <a href="{{ route('profile', $thread->creator) }}">
+                                        {{$thread->creator->name}} </a> posted:
+                                        {{$thread->title}}
+                                </span>
+
                                 @can('update', $thread)
                                     <form action="{{ $thread->path() }}" method="POST">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-link">Delete Thread</button>
+                                        <button type="submit" class="btn btn-link text-danger">Delete Thread</button>
                                     </form>
                                 @endcan
                             </div>
@@ -27,21 +29,10 @@
                         </div>
                     </div>
 
-                    <replies :data="{{$thread->replies}}" @removed="repliesCount--"></replies>
+                    <replies :data="{{$thread->replies}}"
+                             @added="repliesCount++"
+                             @removed="repliesCount--"></replies>
 
-                    @if(auth()->check())
-                        <form action="{{$thread->path() . '/replies'}}" method="POST">
-                            @csrf
-                            <div class="form-group">
-                            <textarea name="body" id="body" class="form-control" placeholder="Have something to say?"
-                                      rows="5"></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Post</button>
-                        </form>
-                    @else
-                        <p>Please <a href="{{route('login')}}">sign in</a> or <a href="{{route('register')}}">register</a>
-                            to participate in this discussion </p>
-                    @endif
                 </div>
                 <div class="col-md-4">
                     <div class="card">

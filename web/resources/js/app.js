@@ -30,8 +30,7 @@ Vue.prototype.authorize = function (handler){
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.component('flash', require('./components/Flash.vue').default);
-Vue.component('replies', require('./components/Replies.vue').default);
-Vue.component('thread-view', require('./pages/Thread').default);
+Vue.component('thread-view', require('./pages/Thread.vue').default);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

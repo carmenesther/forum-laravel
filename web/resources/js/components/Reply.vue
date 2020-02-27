@@ -1,10 +1,11 @@
 <template>
     <div :id="'reply-'+id" class="card">
         <div class="card-header">
-            <div class="form-inline">
+            <div class="level">
                 <span class="flex ">
-                    <a :href="'/profiles/'+data.owner.name" v-text="data.owner.name">
-                    </a> said {{ data.created_at }}...
+                    <a :href="'/profiles/'+data.owner.name"
+                       v-text="data.owner.name">
+                    </a> said {{ data.created_at }}
                 </span>
                 <div v-if="signedIn">
                     <favorite :reply="data"></favorite>
