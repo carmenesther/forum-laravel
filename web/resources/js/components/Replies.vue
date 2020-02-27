@@ -46,6 +46,8 @@
             refresh({data}){
                 this.dataSet = data;
                 this.items = data.data;
+
+                window.scroll(0,0);
             }
         }
     }
