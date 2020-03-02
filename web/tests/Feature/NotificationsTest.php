@@ -3,8 +3,6 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Notifications\DatabaseNotification;
 use Tests\TestCase;
 
