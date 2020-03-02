@@ -6,7 +6,6 @@ use App\Channel;
 use App\Notifications\ThreadWasUpdated;
 use App\Thread;
 use App\User;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Notification;
@@ -124,13 +123,15 @@ class ThreadTest extends TestCase
 
         $thread = create('App\Thread');
 
-        $this->assertTrue($thread->hasUpdatesFor(auth()->user()));
+        tap(auth()->user(), function ($user) use ($thread) {
 
-        $key = sprintf("users.%s.visits.%s", auth()->id(), $thread->id);
+            $this->assertTrue($thread->hasUpdatesFor($user));
 
-        cache()->forever($key, Carbon::now());
+            $user->read($thread);
 
-        $this->assertFalse($thread->hasUpdatesFor(auth()->user()));
+            $this->assertFalse($thread->hasUpdatesFor($user));
+
+        });
 
     }
 }
