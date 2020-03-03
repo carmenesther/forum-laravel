@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreatePostRequest;
 use App\Reply;
 use App\Thread;
+use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Response;
 
 class RepliesController extends Controller
 {
@@ -13,7 +16,8 @@ class RepliesController extends Controller
         $this->middleware('auth', ['except' => 'index']);
     }
 
-    public function index($channelId, Thread $thread){
+    public function index($channelId, Thread $thread)
+    {
         return $thread->replies()->paginate(20);
     }
 
@@ -22,12 +26,12 @@ class RepliesController extends Controller
      * @param $channelId
      * @param Thread $thread
      * @param CreatePostRequest $form
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Database\Eloquent\Model|\Illuminate\Http\Response
+     * @return ResponseFactory|Model|Response
      */
 
     public function store($channelId, Thread $thread, CreatePostRequest $form)
     {
-        return  $thread->addReply([
+        return $thread->addReply([
             'body' => request('body'),
             'user_id' => auth()->id()
         ])->load('owner');
@@ -37,15 +41,9 @@ class RepliesController extends Controller
     {
         $this->authorize('update', $reply);
 
-        try {
-            $this->validate(request(), ['body' => 'required|spamfree']);
+        $this->validate(request(), ['body' => 'required|spamfree']);
 
-            $reply->update(request(['body']));
-        } catch(\Exception $e){
-            return response(
-                'Sorry, your reply could not be saved at this time', 422);
-        }
-
+        $reply->update(request(['body']));
     }
 
     public function destroy(Reply $reply)
@@ -54,7 +52,7 @@ class RepliesController extends Controller
 
         $reply->delete();
 
-        if(request()->expectsJson()){
+        if (request()->expectsJson()) {
             return response(['status' => 'Reply deleted!']);
         }
 

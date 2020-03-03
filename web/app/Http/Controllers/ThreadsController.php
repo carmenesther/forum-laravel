@@ -9,6 +9,9 @@ use Illuminate\Http\Request;
 
 class ThreadsController extends Controller
 {
+    /**
+     * Create a new ThreadsController instance
+     */
     public function __construct()
     {
         $this->middleware('auth')->except('index', 'show');
@@ -75,23 +78,6 @@ class ThreadsController extends Controller
         }
 
         return view('threads.show', compact('thread'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     */
-    public function edit(Thread $thread)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Thread $thread)
-    {
-        //
     }
 
     /**
