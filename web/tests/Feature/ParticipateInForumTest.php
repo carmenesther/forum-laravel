@@ -2,10 +2,8 @@
 
 namespace Tests\Feature;
 
-use App\Activity;
 use App\Reply;
 use App\Thread;
-use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
@@ -108,7 +106,7 @@ class ParticipateInForumTest extends TestCase
     /** @test */
     function replies_that_contains_spam_may_not_be_created()
     {
-        $this->withoutExceptionHandling();
+        $this->withExceptionHandling();
 
         $this->signIn();
 
@@ -118,7 +116,7 @@ class ParticipateInForumTest extends TestCase
             'body' => 'Yahoo Customer Support'
         ]);
 
-        $this->post($thread->path() . '/replies', $reply->toArray())->assertStatus(422);
+        $this->json('post', $thread->path() . '/replies', $reply->toArray())->assertStatus(422);
     }
 
     /** @test */
@@ -136,6 +134,6 @@ class ParticipateInForumTest extends TestCase
             ->assertStatus(201);
 
         $this->post($thread->path() . '/replies', $reply->toArray())
-            ->assertStatus(422);
+            ->assertStatus(429);
     }
 }
