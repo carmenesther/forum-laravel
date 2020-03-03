@@ -51,10 +51,3 @@
         </div>
     </thread-view>
 @endsection
-
-<script>
-    import SubscribeButton from "../../js/components/SubscribeButton";
-    export default {
-        components: {SubscribeButton}
-    }
-</script>
