@@ -46,7 +46,7 @@ Route::get('/profiles/{user}/notifications', 'UsersNotificationsController@index
 Route::delete('/profiles/{user}/notifications/{notification}', 'UsersNotificationsController@destroy');
 
 Route::get('api/users', 'Api\UsersController@index');
-Route::post('api/users/{user}/avatar', 'Api\UserAvatarController@store')->middleware('auth');
+Route::post('api/users/{user}/avatar', 'Api\UserAvatarController@store')->middleware('auth')->name('avatar');
 
 
 //Route::get('/clear-cache', function() {
