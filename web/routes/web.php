@@ -45,6 +45,8 @@ Route::get('/profiles/{user}', 'ProfilesController@show')->name('profile');
 Route::get('/profiles/{user}/notifications', 'UsersNotificationsController@index');
 Route::delete('/profiles/{user}/notifications/{notification}', 'UsersNotificationsController@destroy');
 
+Route::get('api/users', 'Api\UsersController@index');
+
 //Route::get('/clear-cache', function() {
 //    Artisan::call('cache:clear');
 //    return "Cache is cleared";

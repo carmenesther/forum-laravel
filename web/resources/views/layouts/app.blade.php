@@ -31,6 +31,7 @@
         .mr-1 { margin-right: 1em; }
         [v-cloak] { display: none; }
     </style>
+    @yield('scripts')
 </head>
 <body>
     <div id="app">
