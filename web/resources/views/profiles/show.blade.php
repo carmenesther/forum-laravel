@@ -16,7 +16,7 @@
                             <button type="submit" class="btn btn-primary">Add Avatar</button>
                         </form>
                     @endcan
-                    <img src="{{ asset('storage/'. $profileUser->avatar()) }}" width="50" height="50">
+                    <img src="{{asset($profileUser->avatar())}}" width="50" height="50">
                 </div>
                 @forelse ($activities as $date => $activity)
                     <h3 class="page-header"> {{$date}}</h3>
