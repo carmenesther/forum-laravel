@@ -7,8 +7,10 @@ use App\Notifications\ThreadWasUpdated;
 use App\Thread;
 use App\User;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Redis;
 use Tests\TestCase;
 
 class ThreadTest extends TestCase
@@ -16,7 +18,7 @@ class ThreadTest extends TestCase
     use DatabaseMigrations;
 
     /**
-     * @var Collection|\Illuminate\Database\Eloquent\Model
+     * @var Collection|Model
      */
     protected $thread;
 
@@ -27,14 +29,15 @@ class ThreadTest extends TestCase
         $this->thread = create(Thread::class);
     }
 
-        /** @test */
-            function a_thread_can_make_a_string_path ()
-            {
-                $this->withoutExceptionHandling();
-                $thread = $this->thread;
-                $this->assertEquals(
-                    "/threads/{$thread->channel->slug}/{$thread->id}", $thread->path());
-            }
+    /** @test */
+    function a_thread_can_make_a_string_path()
+    {
+        $this->withoutExceptionHandling();
+        $thread = $this->thread;
+        $this->assertEquals(
+            "/threads/{$thread->channel->slug}/{$thread->id}", $thread->path());
+    }
+
     /** @test */
     function a_thread_has_replies()
     {
@@ -42,21 +45,23 @@ class ThreadTest extends TestCase
     }
 
     /** @test */
-    function a_thread_has_a_creator(){
+    function a_thread_has_a_creator()
+    {
         $this->assertInstanceOf(User::class, $this->thread->creator);
     }
 
     /** @test */
-    function a_thread_can_add_a_reply(){
+    function a_thread_can_add_a_reply()
+    {
         $this->thread->addReply([
             'body' => 'Foobar',
             'user_id' => 1
         ]);
-        $this->assertCount(1,  $this->thread->replies);
+        $this->assertCount(1, $this->thread->replies);
     }
 
     /** @test */
-    function a_thread_notifies_all_registered_subscribers_when_a_reply_is_added ()
+    function a_thread_notifies_all_registered_subscribers_when_a_reply_is_added()
     {
         Notification::fake();
 
@@ -73,7 +78,7 @@ class ThreadTest extends TestCase
     }
 
     /** @test */
-    function a_thread_belongs_to_a_channel ()
+    function a_thread_belongs_to_a_channel()
     {
         $this->withoutExceptionHandling();
 
@@ -117,7 +122,7 @@ class ThreadTest extends TestCase
     }
 
     /** @test */
-    function a_thread_can_check_if_the_authenticated_user_has_read_all_replies ()
+    function a_thread_can_check_if_the_authenticated_user_has_read_all_replies()
     {
         $this->signIn();
 
@@ -132,6 +137,24 @@ class ThreadTest extends TestCase
             $this->assertFalse($thread->hasUpdatesFor($user));
 
         });
+    }
+
+    /** @test */
+    function a_thread_records_each_visit()
+    {
+        $thread = make('App\Thread', ['id' => 1]);
+
+        $thread->resetVisits();
+
+        $this->assertSame(0, $thread->visits());
+
+        $thread->recordVisit(); // inc 1
+
+        $this->assertEquals(1, $thread->visits());
+
+        $thread->recordVisit(); // inc 1 to 2
+
+        $this->assertEquals(2, $thread->visits());
 
     }
 }
