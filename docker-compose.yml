@@ -21,3 +21,5 @@ services:
             MYSQL_DATABASE: homestead
             MYSQL_USER: homestead
             MYSQL_PASSWORD: secret
+    redis:
+        image: redis
