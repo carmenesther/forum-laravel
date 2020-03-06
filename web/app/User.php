@@ -29,6 +29,10 @@ class User extends Authenticatable
         'password', 'remember_token', 'email', 'email_verified_at',
     ];
 
+    protected $casts = [
+        'confirmed' => 'boolean'
+    ];
+
     public function getRouteKeyName()
     {
         return 'name';
@@ -49,6 +53,13 @@ class User extends Authenticatable
 
     public function visitedThreadCacheKey($thread){
         return sprintf("users.%s.visits.%s", auth()->id(), $thread->id);
+    }
+
+    public function confirm()
+    {
+        $this->confirmed = true;
+
+        $this->save();
     }
 
     public function read($thread)
