@@ -1,8 +1,8 @@
 <template>
-    <div :id="'reply-'+id" class="card">
-        <div class="card-header">
+    <div :id="'reply-'+id"  class="card">
+        <div :class="isBest ? 'card-header-success' : 'card-header'">
             <div class="level">
-                <span class="flex ">
+                <span class="flex">
                     <a :href="'/profiles/'+data.owner.name"
                        v-text="data.owner.name">
                     </a> said <span v-text="ago"></span>
@@ -27,9 +27,12 @@
         </div>
 
 <!--        @can('update', $reply)-->
-        <div class="card-footer level" v-if="canUpdate">
-            <button class="btn btn-dark btn-sm mr-1" @click="editing = true">Edit</button>
-            <button class="btn btn-danger btn-sm mr-1" @click="destroy">Delete</button>
+        <div class="card-footer level">
+            <div v-if="canUpdate">
+                <button class="btn btn-dark btn-sm mr-1" @click="editing = true">Edit</button>
+                <button class="btn btn-danger btn-sm mr-1" @click="destroy">Delete</button>
+            </div>
+            <button class="btn btn-outline-secondary btn-sm ml-a" @click="markBestReply" v-show="! isBest">Best Reply?</button>
         </div>
 <!--        @endcan-->
     </div>
@@ -49,7 +52,8 @@
             return {
                 id: this.data.id,
                 editing:false,
-                body: this.data.body
+                body: this.data.body,
+                isBest: false
             };
         },
 
@@ -86,6 +90,10 @@
 
                 this.$emit('deleted', this.data.id);
 
+            },
+
+            markBestReply() {
+                this.isBest = true;
             }
         }
     }
