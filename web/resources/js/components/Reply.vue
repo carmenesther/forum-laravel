@@ -51,7 +51,7 @@
                 id: this.data.id,
                 editing:false,
                 body: this.data.body,
-                isBest: false,
+                isBest: this.data.isBest,
                 reply: this.data
             };
         },
@@ -61,6 +61,12 @@
                 return moment(this.data.created_at).fromNow() + '...';
             },
 
+        },
+
+        created(){
+          window.events.$on('best-reply-selected', id => {
+              this.isBest = (id === this.data.id);
+          });
         },
 
         methods: {
@@ -86,7 +92,9 @@
             },
 
             markBestReply() {
-                this.isBest = true;
+                axios.post('/replies/' +this.data.id + '/best');
+
+                window.events.$emit('best-reply-selected', this.data.id);
             }
         }
     }
