@@ -20,7 +20,7 @@ class CreateRepliesTable extends Migration
             $table->text('body');
             $table->timestamps();
 
-            $table->foreign('thread_id')->references('id')->on('threads');
+//            $table->foreign('thread_id')->references('id')->on('threads');
         });
     }
 

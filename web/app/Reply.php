@@ -23,6 +23,10 @@ class Reply extends Model
         });
 
         static::deleted(function ($reply) {
+//            Una manera de hacerlo, pero es mejor hacerlo a nivel db
+//            if($reply->isBest()){
+//                $reply->thread->update(['best_reply_id' => null]);
+//            }
             $reply->thread->decrement('replies_count');
         });
     }
