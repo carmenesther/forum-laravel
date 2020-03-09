@@ -6,7 +6,9 @@ use App\Channel;
 use App\Filters\ThreadFilter;
 use App\Thread;
 use App\Trending;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class ThreadsController extends Controller
 {
@@ -23,13 +25,13 @@ class ThreadsController extends Controller
      * @param Channel $channel
      * @param ThreadFilter $filters
      * @param Trending $trending
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
     public function index(Channel $channel, ThreadFilter $filters, Trending $trending)
     {
         $threads = $this->getThreads($channel, $filters);
 
-        if(request()->wantsJson()){
+        if (request()->wantsJson()) {
             return $threads;
         }
 
@@ -37,90 +39,6 @@ class ThreadsController extends Controller
             'threads' => $threads,
             'trending' => $trending->get()
         ]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view('threads.create');
-    }
-
-    /**
-     * Store a newly created resource in storage
-     */
-    public function store(Request $request)
-    {
-        $this->validate($request, [
-            'title' => 'required|spamfree',
-            'body' => 'required|spamfree',
-            'channel_id' => 'required|exists:channels,id'
-        ]);
-
-        $thread = Thread::create([
-            'user_id' => auth() ->id(),
-            'channel_id' => request('channel_id'),
-            'title' => request('title'),
-            'body' => request('body')
-        ]);
-
-        if(request()->wantsJson()){
-            return response($thread, 201);
-        }
-
-        return redirect($thread->path())
-            ->with('flash', 'Your thread has been published!');
-    }
-
-    /**
-     * Display the specified resource.
-     * @param $channel
-     * @param Thread $thread
-     * @param Trending $trending
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function show($channel, Thread $thread, Trending $trending)
-    {
-        if(auth()->check()){
-            auth()->user()->read($thread);
-        }
-
-        $trending->push($thread);
-
-        $thread->increment('visits');
-
-        return view('threads.show', compact('thread'));
-    }
-// Es una manera de hacerlo sin tener que crear un controller pero se puede convertir
-// en un método muy grueso, por tanto, es mejor evitarlo. Más adelante, se retocará este método
-//    public function update($channel, Thread $thread)
-//    {
-//        if(request()->has('locked')){
-//            // authorization
-//            if(! auth()->user()->isAdmin()){
-//                return response('', 403);
-//            }
-//            $thread->lock();
-//        }
-//    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     */
-    public function destroy($channel, Thread $thread)
-    {
-        $this->authorize('update', $thread);
-
-        $thread->delete();
-
-        if(request()->wantsJson()){
-            return response([], 204);
-        }
-
-        return redirect('/threads');
-
     }
 
     /**
@@ -140,5 +58,86 @@ class ThreadsController extends Controller
 
     }
 
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        return view('threads.create');
+    }
 
+    /**
+     * Store a newly created resource in storage
+     */
+    public function store()
+    {
+        request()->validate([
+            'title' => 'required|spamfree',
+            'body' => 'required|spamfree',
+            'channel_id' => 'required|exists:channels,id'
+        ]);
+
+        $thread = Thread::create([
+            'user_id' => auth()->id(),
+            'channel_id' => request('channel_id'),
+            'title' => request('title'),
+            'body' => request('body')
+        ]);
+
+        if (request()->wantsJson()) {
+            return response($thread, 201);
+        }
+
+        return redirect($thread->path())
+            ->with('flash', 'Your thread has been published!');
+    }
+
+    /**
+     * Display the specified resource.
+     * @param $channel
+     * @param Thread $thread
+     * @param Trending $trending
+     * @return Factory|View
+     */
+    public function show($channel, Thread $thread, Trending $trending)
+    {
+        if (auth()->check()) {
+            auth()->user()->read($thread);
+        }
+
+        $trending->push($thread);
+
+        $thread->increment('visits');
+
+        return view('threads.show', compact('thread'));
+    }
+
+    public function update($channel, Thread $thread)
+    {
+        // authorization
+        $this->authorize('update', $thread);
+        // validation - update the thread
+        $thread->update(request()->validate([
+            'title' => 'required',
+            'body' => 'required',
+        ]));
+
+        return $thread;
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     */
+    public function destroy($channel, Thread $thread)
+    {
+        $this->authorize('update', $thread);
+
+        $thread->delete();
+
+        if (request()->wantsJson()) {
+            return response([], 204);
+        }
+        return redirect('/threads');
+    }
 }
