@@ -2,18 +2,17 @@
 
 namespace App;
 
-use App\Events\ThreadHasNewReply;
 use App\Events\ThreadReceivedNewReply;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Str;
+use Laravel\Scout\Searchable;
 
 /**
  * @method static create(array $array)
  */
 class Thread extends Model
 {
-    use RecordsActivity;
+    use RecordsActivity, Searchable;
 
     protected $guarded = [];
 
