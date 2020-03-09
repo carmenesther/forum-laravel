@@ -8,10 +8,11 @@ class LockedThreadsController extends Controller
 {
     public function store(Thread $thread)
     {
-//        authorization - Ahora no hará falta porque se ha creado un middleware
-//        if (!auth()->user()->isAdmin()) {
-//            return response('You do not have permission, you cannot locked this thread', 403);
-//        }
-        $thread->lock();
+        $thread->update(['locked' => true]);
+    }
+
+    public function destroy(Thread $thread)
+    {
+        $thread->update(['locked' => false]);
     }
 }
