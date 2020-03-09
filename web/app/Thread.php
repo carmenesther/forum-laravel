@@ -119,4 +119,9 @@ class Thread extends Model
         $reply->thread->update(['best_reply_id' => $reply->id]);
     }
 
+    public function lock()
+    {
+        $this->update(['locked' => true]);
+    }
+
 }

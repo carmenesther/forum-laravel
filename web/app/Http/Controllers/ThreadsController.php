@@ -92,6 +92,18 @@ class ThreadsController extends Controller
 
         return view('threads.show', compact('thread'));
     }
+// Es una manera de hacerlo sin tener que crear un controller pero se puede convertir
+// en un método muy grueso, por tanto, es mejor evitarlo. Más adelante, se retocará este método
+//    public function update($channel, Thread $thread)
+//    {
+//        if(request()->has('locked')){
+//            // authorization
+//            if(! auth()->user()->isAdmin()){
+//                return response('', 403);
+//            }
+//            $thread->lock();
+//        }
+//    }
 
     /**
      * Remove the specified resource from storage.

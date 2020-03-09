@@ -35,3 +35,9 @@ $factory->state(User::class, 'unconfirmed', function () {
         'confirmation_token' => Str::random(25)
     ];
 });
+
+$factory->state(User::class, 'administrator', function () {
+    return [
+        'name' => 'JohnDoe'
+    ];
+});
