@@ -4,12 +4,13 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-import Thread from "./pages/Thread";
-import UserNotifications from "./components/UserNotifications";
+import InstantSearch from "vue-instantsearch";
 
 require('./bootstrap');
 
 window.Vue = require('vue');
+
+Vue.use(InstantSearch);
 
 let authorizations = require('./authorizations');
 
