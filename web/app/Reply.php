@@ -4,6 +4,7 @@ namespace App;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Stevebauman\Purify\Facades\Purify;
 
 class Reply extends Model
 {
@@ -23,10 +24,6 @@ class Reply extends Model
         });
 
         static::deleted(function ($reply) {
-//            Una manera de hacerlo, pero es mejor hacerlo a nivel db
-//            if($reply->isBest()){
-//                $reply->thread->update(['best_reply_id' => null]);
-//            }
             $reply->thread->decrement('replies_count');
         });
     }
@@ -68,5 +65,10 @@ class Reply extends Model
     public function getIsBestAttribute()
     {
         return $this->isBest();
+    }
+
+    public function getBodyAttribute($body)
+    {
+        return Purify::clean($body);
     }
 }
