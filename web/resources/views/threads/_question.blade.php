@@ -8,7 +8,7 @@
 
     <div class="card-body">
         <div class="form-group">
-            <textarea class="form-control" rows="10" v-model="form.body"></textarea>
+            <editor v-model="form.body" :value="form.body" ></editor>
         </div>
     </div>
 
@@ -41,7 +41,7 @@
         </div>
     </div>
 
-    <div class="card-body" v-text="body"></div>
+    <div class="card-body" v-html="body"></div>
 
     <div class="card-footer" v-if="authorize('owns', thread)">
         <button class="btn btn-secondary btn-sm" @click="editing = true">Edit</button>
